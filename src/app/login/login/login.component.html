@@ -1,0 +1,91 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="sidenav">
+  <div class="login-main-text">
+    <h2>Comisaría<br> Virtual</h2>
+    <p>Loguee o registrese para acceder.</p>
+  </div>
+</div>
+<div class="main">
+  <div class="col-md-6 col-sm-12">
+    <div class="login-form">
+      <form [formGroup]="formLogin">
+        <div class="form-group">
+          <label>Email</label>
+          <input type="text" class="form-control" placeholder="Email" formControlName="email" #loginEmail>
+        </div>
+        <div class="form-group">
+          <label>Contraseña</label>
+          <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" #loginPassword>
+        </div>
+        <button type="submit" class="btn btn-black" (click)="onLogin(loginEmail.value, loginPassword.value)">Login</button>
+        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><span>Registrar</span></a>
+      </form>
+    </div>
+  </div>
+</div>
+
+
+<div id="addEmployeeModal" class="modal fade">
+  <div class="modal-dialog" style="overflow-y: initial !important">
+    <div class="modal-content">
+      <form [formGroup]="formRegister">
+        <div class="modal-header">
+          <h5 class="modal-title">Añadir Usuario</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        </div>
+        <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 200px);">
+          <div class="form-group">
+            <small>Nombre</small>
+            <input type="text" class="form-control" value="" formControlName="addNombre" #addNombre/>
+          </div>
+          <div class="form-group">
+            <small>Apellidos</small>
+            <input type="text" class="form-control" value="" formControlName="addApellidos" #addApellidos/>
+          </div>
+          <div class="form-group">
+            <small>Dirección</small>
+            <input type="text" class="form-control" value="" name="direccion" formControlName="addDireccion" #addDireccion/>
+          </div>
+          <div class="form-group">
+            <small>DNI</small>
+            <input type="text" class="form-control" value="" formControlName="addDNI" #addDni/>
+          </div>
+          <div class="form-group">
+            <small>Móvil</small>
+            <input type="text" name="txtEmpPhone" class="form-control" value=""formControlName="addMovil" #addMovil/>
+          </div>
+          <div class="form-group">
+            <small>Email</small>
+            <input  type="email" class="form-control" formControlName="addEmail" content="" value="" #addEmail/>
+          </div>
+          <div class="form-group">
+            <small>Password</small>
+            <input type="password" class="form-control" name="password" formControlName="addPassword" #addPassword/>
+
+          </div>
+          <div class="form-group">
+            <div class="maxl">
+              <label class="radio inline ml-1">
+                <input type="radio" value="0" checked="checked" formControlName="addGenero" [ngModel]="genero">
+                <small> Hombre </small>
+              </label>
+              <label class="radio inline ml-3">
+                <input type="radio" value="1" formControlName="addGenero" [ngModel]="genero">
+                <small>Mujer </small>
+              </label>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
+          <a class="btn btn-success" data-toggle="modal" (click)="addUser(addNombre.value, addApellidos.value, addDireccion.value, addDni.value, addEmail.value, addMovil.value,
+          addPassword.value);" data-dismiss="modal"><span>Añadir</span></a>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
