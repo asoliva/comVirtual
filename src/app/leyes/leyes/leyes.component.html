@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+  <title>Administración de Multas</title>
+  <link href="css/styles.css" rel="stylesheet" />
+  <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+
+
+
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+  <style>
+    .main-section{
+      margin:0 auto;
+      margin-top:5%;
+    }
+    .card{
+      opacity: .95;
+    }
+    .card-body{
+      background-color: #d1d3d6;
+      box-shadow: 0px 0px 3px #848484;
+    }
+
+    label{
+      font-weight: bold;
+    }
+
+    .nav-tabs .nav-item a:not(.active){
+      background-color: #d1d3d6;
+    }
+
+  </style>
+</head>
+<body class="sb-nav-fixed">
+<nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
+  <a class="navbar-brand">Comisaría Virtual</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle"></button>
+</nav>
+<div id="layoutSidenav">
+  <div id="layoutSidenav_nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+      <div class="sb-sidenav-menu">
+        <div class="nav">
+          <div class="sb-sidenav-menu-heading">Mostrar</div>
+          <a class="nav-link" routerLink="../comvirtual">
+            Panel de control</a>
+          <a class="nav-link" href="">
+            Leyes</a>
+          <div class="sb-sidenav-menu-heading">Administración</div>
+          <a class="nav-link collapsed"  routerLink="../usuarios">
+            Usuarios
+          </a>
+          <a class="nav-link collapsed" routerLink="../multas">
+            Multas
+          </a>
+          <a class="nav-link" routerLink="/denuncias">
+            Denuncias</a>
+          <div class="sb-sidenav-menu-heading">Cerrar Sesión</div>
+          <a class="nav-link" (click)="logout()" style="cursor: pointer">
+            <div class="sb-nav-link-icon"><i class="fas fa-tachometer-alt"></i></div>
+            Salir</a>
+        </div>
+      </div>
+      <div class="sb-sidenav-footer">
+        <div class="small">Logged in as:</div>
+        {{email}}
+      </div>
+    </nav>
+  </div>
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid">
+        <div class="mx-auto col-sm-8 main-section" id="myTab" role="tablist">
+          <div class="tab-content" id="myTabContent">
+            <div class="tab-pane fade show active" id="list" role="tabpanel" aria-labelledby="list-tab">
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-sm-6">
+                      <h4>Leyes</h4>
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="table-responsive">
+                    <table id="userList" class="table table-bordered table-hover table-striped">
+                      <thead class="thead-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th>Descripcion</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr *ngFor="let ley of leyes | paginas: page_size: page_number; let i = index">
+                        <td>{{i + 1}}</td>
+                        <td>{{ley.descripcion}}</td>
+                      </tr>
+                      </tbody>
+                    </table>
+                    <mat-paginator [length]="leyes.length" [pageSize]="page_size" [pageSizeOptions]="pageSizeOptions" showFirstLastButtons (page)="handlePage($event)" ></mat-paginator>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+    <footer class="py-4 bg-light mt-auto">
+      <div class="container-fluid">
+        <div class="d-flex align-items-center justify-content-between small">
+          <div class="text-muted">Copyright &copy; Alberto Salazar Oliva 2020</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/jquery.dataTables.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.20/js/dataTables.bootstrap4.min.js" crossorigin="anonymous"></script>
+
+</body>
+</html>
+

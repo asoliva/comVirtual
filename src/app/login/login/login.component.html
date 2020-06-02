@@ -1,8 +1,47 @@
 <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
 <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.8/css/solid.css">
+<script src="https://use.fontawesome.com/releases/v5.0.7/js/all.js"></script>
 <!------ Include the above in your HEAD tag ---------->
+<style>
+  .user-img{
+    margin-top: -50px;
+    margin-bottom: 35px;
+  }
 
+  .user-img img{
+    width: 100px;
+    height: 100px;
+    box-shadow: 0px 0px 3px #848484;
+    border-radius: 50%;
+  }
+
+  .form-group::before{
+    font-family: "Font Awesome\ 5 Free";
+    position: absolute;
+    left: 28px;
+    font-size: 22px;
+    padding-top:4px;
+  }
+
+  .form-group#user-group::before{
+    content: "\f007";
+  }
+
+  .form-group#contrasena-group::before{
+    content: "\f023";
+  }
+
+
+  .forgot{
+    padding: 5px 0;
+  }
+
+  .forgot a{
+    color: white;
+  }
+</style>
 <div class="sidenav">
   <div class="login-main-text">
     <h2>Comisaría<br> Virtual</h2>
@@ -10,20 +49,27 @@
   </div>
 </div>
 <div class="main">
-  <div class="col-md-6 col-sm-12">
-    <div class="login-form">
-      <form [formGroup]="formLogin">
-        <div class="form-group">
-          <label>Email</label>
-          <input type="text" class="form-control" placeholder="Email" formControlName="email" #loginEmail>
+  <div class="modal-dialog text-center">
+    <div class="col-sm-8 main-section" style="margin:0 auto; margin-top:25%; padding: 0;">
+      <div class="modal-content" style="background-color: #3b4652;opacity: .85; padding: 0 20px; box-shadow: 0px 0px 3px #848484;">
+        <div class="col-12 user-img">
+          <img src="../../../assets/user.png"/>
         </div>
-        <div class="form-group">
-          <label>Contraseña</label>
-          <input type="password" class="form-control" placeholder="Contraseña" formControlName="password" #loginPassword>
+        <form class="col-12" [formGroup]="formLogin">
+          <div class="form-group" id="user-group">
+            <input style="height: 42px;font-size: 18px;border:0;padding-left: 54px;border-radius: 5px;" type="text" class="form-control" placeholder="Email" name="username" formControlName="email" #loginEmail/>
+          </div>
+          <div class="form-group" id="contrasena-group">
+            <input style="height: 42px;font-size: 18px;border:0;padding-left: 54px;border-radius: 5px;" type="password" class="form-control" placeholder="Contraseña" name="password" formControlName="password" #loginPassword/>
+          </div>
+          <button style="width: 60%;margin: 5px 0 25px;" type="submit" class="btn btn-primary" (click)="onLogin(loginEmail.value, loginPassword.value)"><i class="fas fa-sign-in-alt"></i>  Ingresar </button>
+          <br>
+          <a style="width: 60%;margin: 5px 0 25px;" href="#addEmployeeModal" class="btn btn-success" data-toggle="modal" (click)="this.formRegister.reset(); this.formRegister.get('addGenero').setValue('0')"><span>Registrar</span></a>
+        </form>
+        <div class="col-12 forgot">
+          <a routerLink="../fpassword">Recordar contraseña?</a>
         </div>
-        <button type="submit" class="btn btn-black" (click)="onLogin(loginEmail.value, loginPassword.value)">Login</button>
-        <a href="#addEmployeeModal" class="btn btn-success" data-toggle="modal"><span>Registrar</span></a>
-      </form>
+      </div>
     </div>
   </div>
 </div>
@@ -40,32 +86,77 @@
         <div class="modal-body" style="overflow-y: auto; max-height: calc(100vh - 200px);">
           <div class="form-group">
             <small>Nombre</small>
-            <input type="text" class="form-control" value="" formControlName="addNombre" #addNombre/>
+            <input type="text" class="form-control" value="" formControlName="addNombre" #addNombre [class.is-invalid]="formRegister.get('addNombre').invalid && formRegister.get('addNombre').touched"/>
+            <div *ngIf="(nombreFormulario.invalid && nombreFormulario.touched) || nombreFormulario.dirty || errorNombre">
+              <small *ngIf="nombreFormulario.errors?.required" class="text-danger">Nombre requerido</small>
+              <!--question mark(?) is a safe navigation operator-->
+              <small *ngIf="nombreFormulario.errors?.maxlength" class="text-danger">Nombre demasiado largo</small>
+            </div>
           </div>
           <div class="form-group">
             <small>Apellidos</small>
-            <input type="text" class="form-control" value="" formControlName="addApellidos" #addApellidos/>
+            <input type="text" class="form-control" value="" formControlName="addApellidos" #addApellidos [class.is-invalid]="formRegister.get('addApellidos').invalid && formRegister.get('addApellidos').touched"/>
+            <div *ngIf="(apellidosFormulario.invalid && apellidosFormulario.touched) || apellidosFormulario.dirty || errorApellidos">
+              <small *ngIf="apellidosFormulario.errors?.required" class="text-danger">Apellidos requeridos</small>
+              <!--question mark(?) is a safe navigation operator-->
+              <small *ngIf="apellidosFormulario.errors?.maxlength" class="text-danger">Apellidos demasiado largos</small>
+            </div>
           </div>
           <div class="form-group">
             <small>Dirección</small>
-            <input type="text" class="form-control" value="" name="direccion" formControlName="addDireccion" #addDireccion/>
+            <input type="text" class="form-control" value="" name="direccion" formControlName="addDireccion" #addDireccion [class.is-invalid]="formRegister.get('addDireccion').invalid && formRegister.get('addDireccion').touched"/>
+            <div *ngIf="(direccionFormulario.invalid && direccionFormulario.touched) || direccionFormulario.dirty || errorDireccion">
+              <small *ngIf="direccionFormulario.errors?.required" class="text-danger">Direccion requerida</small>
+              <!--question mark(?) is a safe navigation operator-->
+              <small *ngIf="direccionFormulario.errors?.maxlength" class="text-danger">Direccion demasiado larga</small>
+            </div>
           </div>
           <div class="form-group">
             <small>DNI</small>
-            <input type="text" class="form-control" value="" formControlName="addDNI" #addDni/>
+            <input type="text" class="form-control" value="" formControlName="addDNI" #addDni [class.is-invalid]="formRegister.get('addDNI').invalid && formRegister.get('addDNI').touched"/>
+            <div *ngIf="(dniFormulario.invalid && dniFormulario.touched) || dniFormulario.dirty || errorDNI">
+              <small *ngIf="dniFormulario.errors?.required" class="text-danger">DNI requerido</small>
+              <small *ngIf="dniFormulario.errors?.pattern" class="text-danger">DNI no válido (formato: 00000000-X)</small>
+            </div>
+            <small *ngIf="this.dniRepetido()" class="text-danger">DNI registrado</small>
           </div>
           <div class="form-group">
             <small>Móvil</small>
-            <input type="text" name="txtEmpPhone" class="form-control" value=""formControlName="addMovil" #addMovil/>
+            <input type="text" name="txtEmpPhone" class="form-control" value=""formControlName="addMovil" #addMovil [class.is-invalid]="formRegister.get('addMovil').invalid && formRegister.get('addMovil').touched"/>
+            <div *ngIf="(movilFormulario.invalid && movilFormulario.touched) || movilFormulario.dirty || errorMovil">
+              <small *ngIf="movilFormulario.errors?.required" class="text-danger">Móvil requerido</small>
+              <small *ngIf="movilFormulario.errors?.pattern" class="text-danger">Móvil no válido *9 dígitos empezando por 6 ò 7</small>
+            </div>
           </div>
           <div class="form-group">
             <small>Email</small>
-            <input  type="email" class="form-control" formControlName="addEmail" content="" value="" #addEmail/>
+            <input  type="email" class="form-control" formControlName="addEmail" content="" value="" #addEmail [class.is-invalid]="formRegister.get('addEmail').invalid && formRegister.get('addEmail').touched"/>
+            <div *ngIf="(emailFormulario.invalid && emailFormulario.touched) || emailFormulario.dirty || errorEmail">
+              <small *ngIf="emailFormulario.errors?.required" class="text-danger">Email requerido</small>
+              <small *ngIf="emailFormulario.errors?.pattern" class="text-danger">Email no válido</small>
+              <small *ngIf="emailFormulario.errors?.maxlength" class="text-danger">Email demasiado largo</small>
+            </div>
+            <small *ngIf="this.emailRepetido()" class="text-danger">Email registrado</small>
           </div>
           <div class="form-group">
             <small>Password</small>
-            <input type="password" class="form-control" name="password" formControlName="addPassword" #addPassword/>
-
+            <input type="password" class="form-control" name="password" formControlName="addPassword" #addPassword [class.is-invalid]="formRegister.get('addPassword').invalid && formRegister.get('addPassword').touched"/>
+            <div *ngIf="(passwordFormulario.invalid && passwordFormulario.touched) || passwordFormulario.dirty || errorPassword">
+              <small *ngIf="passwordFormulario.errors?.required" class="text-danger">Contraseña requerida</small>
+              <small *ngIf="passwordFormulario.errors?.minlength" class="text-danger">Contraseña demasiado corta (entre 8 y 14 caracteres)</small>
+              <small *ngIf="passwordFormulario.errors?.maxlength" class="text-danger">Contraseña demasiada larga (entre 8 y 14 caracteres)</small>
+            </div>
+            <small *ngIf="!this.passCorrecta()" class="text-danger">Las contraseñas no coinciden</small>
+          </div>
+          <div class="form-group">
+            <small>Confirmar Password</small>
+            <input type="password" class="form-control" name="password" formControlName="addPasswordConfirm" #addPassword [class.is-invalid]="formRegister.get('addPasswordConfirm').invalid && formRegister.get('addPasswordConfirm').touched"/>
+            <div *ngIf="(passwordFormularioConfirm.invalid && passwordFormularioConfirm.touched) || passwordFormularioConfirm.dirty || errorPassword">
+              <small *ngIf="passwordFormularioConfirm.errors?.required" class="text-danger">Contraseña requerida</small>
+              <small *ngIf="passwordFormularioConfirm.errors?.minlength" class="text-danger">Contraseña demasiado corta (entre 8 y 14 caracteres)</small>
+              <small *ngIf="passwordFormularioConfirm.errors?.maxlength" class="text-danger">Contraseña demasiada larga (entre 8 y 14 caracteres)</small>
+            </div>
+            <small *ngIf="!this.passCorrecta()" class="text-danger">Las contraseñas no coinciden</small>
           </div>
           <div class="form-group">
             <div class="maxl">
@@ -83,7 +174,7 @@
         <div class="modal-footer">
           <input type="button" class="btn btn-default" data-dismiss="modal" value="Cancelar">
           <a class="btn btn-success" data-toggle="modal" (click)="addUser(addNombre.value, addApellidos.value, addDireccion.value, addDni.value, addEmail.value, addMovil.value,
-          addPassword.value);" data-dismiss="modal"><span>Añadir</span></a>
+          addPassword.value);"><span>Añadir</span></a>
         </div>
       </form>
     </div>

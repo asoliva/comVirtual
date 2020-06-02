@@ -6,6 +6,7 @@ import {Multa} from '../../interfaces/multa';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {AuthService} from '../../services/auth/auth.service';
 import {Router} from '@angular/router';
+import {PageEvent} from '@angular/material/paginator';
 
 
 @Component({
@@ -24,17 +25,32 @@ export class MultasComponent implements OnInit {
     fecha: Date.now(),
     descripcion: '',
     idLey: ''
-  }
+  };
   // -----------------------------------------------------------------------------
   multaForm = new FormGroup({
     addUsuario: new FormControl('-1', [Validators.minLength(4)]),
     addLey: new FormControl('-1', [Validators.minLength(4)]),
     addDescripcion: new FormControl('', [Validators.required, Validators.maxLength(255), Validators.minLength(25)])
-  })
+  });
   errorNombre: boolean;
   errorLey: boolean;
   errorDescripcion: boolean;
-  emailUser: string;
+  email: any;
+  acceso: any;
+  multasUser: any = [];
+  usuario: any;
+  // Paginator
+  // tslint:disable-next-line:variable-name
+  page_size = 5;
+  // tslint:disable-next-line:variable-name
+  page_number = 1;
+  pageSizeOptions: [ 5 , 10 , 15 , 20];
+  multaDetails: Multa = {
+    idUsuario: '',
+    fecha: null,
+    descripcion: '',
+    idLey: ''
+  };
   // tslint:disable-next-line:max-line-length
   constructor(private multaService: MultasService, private usuariosService: UsuariosService, private leyesService: LeyesService, private authService: AuthService, private route: Router) {
     this.multaService.getMultas().subscribe(multas => {
@@ -46,15 +62,35 @@ export class MultasComponent implements OnInit {
     this.leyesService.getLeyes().subscribe(leyes => {
       this.leyes = leyes;
     });
+    // ---------------
+    this.authService.getCurrentUser().then(user => {
+      this.email = user.email;
+      this.usuariosService.getUsuario(user.uid).subscribe(usuario => {
+        this.acceso = usuario[0].acceso;
+        console.log(this.acceso);
+        if (this.acceso === '2') {
+          this.multaService.getMultaUser(usuario[0]).subscribe(multa => {
+            this.multasUser = multa;
+          });
+        }
+        if (this.acceso === '0') {
+          this.route.navigate(['login']);
+          window.alert('No tienes permiso para acceder a la página');
+        }
+      });
+    });
+
   }
 
-  ngOnInit() {
+    ngOnInit() {}
+  handlePage(e: PageEvent) {
+    this.page_size = e.pageSize;
+    this.page_number = e.pageIndex + 1;
   }
-
   elminarMulta() {
     this.multaService.borrarMulta(this.multa.id);
   }
-  cargarMulta (multa: Multa) {
+  cargarMulta(multa: Multa) {
     this.multa = multa;
   }
   // ---------------------------------------Añadir Multa-------------------------------------------------
@@ -117,13 +153,13 @@ export class MultasComponent implements OnInit {
   get descripcionForm() {
     return this.multaForm.get('addDescripcion');
   }
-  getUserEmail() {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.usuarios.length; i++) {
-      if (this.emailUser === this.usuarios[i].email) {
-        return this.usuarios[i].nombre + ' ' + this.usuarios[i].apellidos;
-      }
-    }
+
+  logout() {
+    this.authService.logout();
+    this.route.navigate(['login']);
   }
 
+  details(multa: any) {
+    console.log(this.multaDetails);
+  }
 }

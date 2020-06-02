@@ -6,6 +6,7 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 import {Denuncia} from '../../interfaces/denuncia';
 import {AuthService} from '../../services/auth/auth.service';
 import {Router} from '@angular/router';
+import {PageEvent} from '@angular/material/paginator';
 
 @Component({
   selector: 'app-denuncias',
@@ -40,6 +41,15 @@ export class DenunciasComponent implements OnInit {
     fecha: null,
     estado: 'En trámite'
   }
+  email: any;
+  acceso: any;
+  // Paginator
+  // tslint:disable-next-line:variable-name
+  page_size = 5;
+  // tslint:disable-next-line:variable-name
+  page_number = 1;
+  pageSizeOptions: [ 5 , 10 , 15 , 20];
+  denunciaDetails: any = '';
   // tslint:disable-next-line:max-line-length
   constructor(private denunciaService: DenunciasService, private userService: UsuariosService, private tipoDenunciaService: TipoDenunciaService, private route: Router, private authService: AuthService) {
     this.denunciaService.getDenuncias().subscribe(denuncia => {
@@ -54,6 +64,20 @@ export class DenunciasComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.getCurrentUser().then(user => {
+      this.email = user.email;
+      this.userService.getUsuario(user.uid).subscribe(usuario => {
+        this.acceso = usuario[0].acceso;
+        if (this.acceso !== '1') {
+          this.route.navigate(['login']);
+          window.alert('No tienes permiso para acceder a la página');
+        }
+      });
+    });
+  }
+  handlePage(e: PageEvent) {
+    this.page_size = e.pageSize;
+    this.page_number = e.pageIndex + 1;
   }
  // Propiedades del formulario
   get userAdd(){
@@ -123,12 +147,8 @@ export class DenunciasComponent implements OnInit {
   cargarDenuncia (denuncia: Denuncia) {
     this.denuncia = denuncia;
   }
-  getUserEmail() {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.usuarios.length; i++) {
-      if (this.emailUser === this.usuarios[i].email) {
-        return this.usuarios[i].nombre + ' ' + this.usuarios[i].apellidos;
-      }
-    }
+  logout() {
+    this.authService.logout();
+    this.route.navigate(['home']);
   }
 }

@@ -10,12 +10,14 @@
   <link href="css/styles.css" rel="stylesheet" />
   <link href="https://cdn.datatables.net/1.10.20/css/dataTables.bootstrap4.min.css" rel="stylesheet" crossorigin="anonymous" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/js/all.min.js" crossorigin="anonymous"></script>
+  <link href="../../home/home/style.css" rel="stylesheet">
+
 </head>
 <body class="sb-nav-fixed">
 <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
-  <a class="navbar-brand" href="index.html">Comisaría Virtual</a><button class="btn btn-link btn-sm order-1 order-lg-0" id="sidebarToggle" href="#"><i class="fas fa-bars"></i></button>
+  <a class="navbar-brand">Comisaría Virtual</a>
 </nav>
-<div id="layoutSidenav">
+<div id="layoutSidenav" *ngIf="acceso === '1' || acceso === '2'">
   <div id="layoutSidenav_nav">
     <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
       <div class="sb-sidenav-menu">
@@ -26,13 +28,16 @@
           <a class="nav-link" href="">
             Leyes</a>
           <div class="sb-sidenav-menu-heading">Administración</div>
-          <a class="nav-link collapsed" routerLink="../usuarios">
+          <a class="nav-link collapsed" routerLink="../usuarios" *ngIf="acceso === '1'">
             Usuarios
           </a>
-          <a class="nav-link collapsed" routerLink="../multas">
+          <a class="nav-link collapsed" routerLink="../multas" *ngIf="acceso === '2'">
+            Multas Pendientes
+          </a>
+          <a class="nav-link collapsed" routerLink="../multas" *ngIf="acceso === '1'">
             Multas
           </a>
-          <a class="nav-link" routerLink="../denuncias">
+          <a class="nav-link" routerLink="../denuncias" *ngIf="acceso === '1'">
             Denuncias</a>
           <div class="sb-sidenav-menu-heading">Cerrar Sesión</div>
           <a class="nav-link" href="" (click)="logout()" routerLink="../home">
@@ -42,7 +47,7 @@
       </div>
       <div class="sb-sidenav-footer">
         <div class="small">Logged in as:</div>
-        {{getUserEmail()}}
+        {{email}}
       </div>
     </nav>
   </div>
@@ -54,14 +59,19 @@
           <li class="breadcrumb-item active"></li>
         </ol>
         <div class="row">
-          <div class="col-xl-3 col-md-6">
+          <div class="col-xl-3 col-md-6" *ngIf="acceso === '1'">
             <div class="card bg-primary text-white mb-4">
               <div class="card-body"><a class="small text-white stretched-link" routerLink="../usuarios">Administrar Usuarios</a></div>
             </div>
           </div>
-          <div class="col-xl-3 col-md-6">
+          <div class="col-xl-3 col-md-6" *ngIf="acceso === '1'">
             <div class="card bg-warning text-white mb-4">
               <div class="card-body"><a class="small text-white stretched-link" routerLink="../multas">Administrar Multas</a></div>
+            </div>
+          </div>
+          <div class="col-xl-3 col-md-6" *ngIf="acceso === '2'">
+            <div class="card bg-success text-white mb-4">
+              <div class="card-body"><a class="small text-white stretched-link" routerLink="../multas">Consultar multas</a></div>
             </div>
           </div>
           <div class="col-xl-3 col-md-6">
@@ -69,7 +79,7 @@
               <div class="card-body"><a class="small text-white stretched-link">Leyes</a></div>
             </div>
           </div>
-          <div class="col-xl-3 col-md-6">
+          <div class="col-xl-3 col-md-6" *ngIf="acceso === '1'">
             <div class="card bg-danger text-white mb-4">
               <div class="card-body"><a class="small text-white stretched-link" routerLink="../denuncias">Denuncias</a></div>
             </div>
@@ -77,14 +87,42 @@
         </div><div class="row">
           <div class="col-xl-6">
             <div class="card mb-4">
-              <div class="card-header"><i class="fas fa-chart-area mr-1"></i>Area Chart Example</div>
-              <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
+              <div class="card-header"><i class="fas fa-chart-area mr-1"></i></div>
+              <div class="card-body">
+                <div class="blog-box">
+                  <div class="post-media">
+                    <a title="">
+                      <img style="width: 750px; height: 425px" src="../../../assets/Home/coronavirus-ultimas-noticias-hoy-sabado-novedades-directo_620x368.jpg" alt="" class="img-fluid">
+                      <div style="width: 750px; height: 425px" class="hovereffect">
+                      </div><!-- end hover -->
+                      <span class="menucat">Covi-19</span>
+                    </a>
+                  </div><!-- end media -->
+                  <div class="blog-meta">
+                    <h4>Localizados y puestos en cuarentena los cinco sevillanos de la fiesta en Córdoba en la que hubo un positivo</h4>
+                  </div><!-- end meta -->
+                </div><!-- end blog-box -->
+              </div>
             </div>
           </div>
           <div class="col-xl-6">
             <div class="card mb-4">
-              <div class="card-header"><i class="fas fa-chart-bar mr-1"></i>Bar Chart Example</div>
-              <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+              <div class="card-header"><i class="fas fa-chart-bar mr-1"></i></div>
+              <div class="card-body">
+                <div class="blog-box">
+                <div class="post-media">
+                  <a title="">
+                    <img style="width: 750px; height: 425px" src="../../../assets/Home/resistencia-ciudadanos-Sevilla-alarma-dias_1462664286_121118650_667x375.jpg" alt="" class="img-fluid">
+                    <div style="width: 750px; height: 425px" class="hovereffect">
+                    </div><!-- end hover -->
+                    <span class="menucat">Covi-19</span>
+                  </a>
+                </div><!-- end media -->
+                <div class="blog-meta">
+                  <h4>Últimas noticias del coronavirus, en directo | Más de 373.000 muertos y 6,2 millones de contagiados en el mundo</h4>
+                </div><!-- end meta -->
+              </div><!-- end blog-box -->
+              </div>
             </div>
           </div>
         </div>
@@ -99,6 +137,7 @@
     </footer>
   </div>
 </div>
+
 <script src="https://code.jquery.com/jquery-3.4.1.min.js" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 <script src="js/scripts.js"></script>

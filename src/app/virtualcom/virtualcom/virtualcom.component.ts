@@ -10,8 +10,11 @@ import {UsuariosService} from '../../services/usuario.service';
   providers: [AuthService]
 })
 export class VirtualcomComponent implements OnInit {
-  emailUser: string;
   usuarios: any = [];
+  usuario: any = [];
+  email: any;
+  acceso: any;
+  // Bar char
   constructor(private authService: AuthService, private route: Router, private userService: UsuariosService) {
     this.userService.getUsuarios().subscribe(usuario => {
       this.usuarios = usuario;
@@ -19,19 +22,21 @@ export class VirtualcomComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.authService.getCurrentUser().then(user => {
+      this.email = user.email;
+      this.userService.getUsuario(user.uid).subscribe(usuario => {
+        this.acceso = usuario[0].acceso;
+        if (this.acceso === '0') {
+          this.route.navigate(['login']);
+          window.alert('No tienes permiso para acceder a la página');
+        }
+      });
+    });
   }
 
   logout() {
     this.authService.logout();
-    this.route.navigate(['home']);
-  }
-  getUserEmail() {
-    // tslint:disable-next-line:prefer-for-of
-    for (let i = 0; i < this.usuarios.length; i++) {
-      if (this.emailUser === this.usuarios[i].email) {
-        return this.usuarios[i].nombre + ' ' + this.usuarios[i].apellidos;
-      }
-    }
+    this.route.navigate(['login']);
   }
 
 }

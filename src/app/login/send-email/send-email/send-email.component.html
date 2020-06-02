@@ -1,4 +1,4 @@
-<div class="card mt-5" *ngIf="user$ | async as user; else loading">
+<div class="card mt-5" *ngIf="user$ | async as user">
   <div class="card-body">
     <h3 class="card-title text-center">Gracias por registrarte!</h3>
     <div class="form-group mt-2">
@@ -20,6 +20,3 @@
   </div>
 </div>
 
-<ng-template #loading>
-  Loading....
-</ng-template>

@@ -1,16 +1,13 @@
 import { Injectable } from '@angular/core';
-import {User} from 'firebase';
 import {AngularFireAuth} from '@angular/fire/auth';
-import {first} from 'rxjs/operators';
-import {AngularFireDatabase} from '@angular/fire/database';
-import {UsuariosService} from '../usuario.service';
-import {Usuario} from '../../interfaces/usuario';
+import {first, switchMap} from 'rxjs/operators';
 
+import {Usuario} from '../../interfaces/usuario';
+import {User} from '../../interfaces/usuario';
 @Injectable()
-export class AuthService {
-  public usuario: Usuario;
-  public user: User;
-  constructor(public afAuth: AngularFireAuth, private afdatabase: AngularFireDatabase, private userService: UsuariosService) { }
+export class AuthService{
+  constructor(public afAuth: AngularFireAuth) {
+  }
   async sendVerificationEmail(): Promise<void>{
     return (await this.afAuth.currentUser).sendEmailVerification();
   }
@@ -41,5 +38,11 @@ export class AuthService {
   getCurrentUser(){
     return this.afAuth.authState.pipe(first()).toPromise();
   }
-
+  async resetPassword(email: string): Promise<void> {
+    try {
+      return await this.afAuth.sendPasswordResetEmail(email);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

@@ -1,20 +1,19 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { DenunciasRoutingModule } from './denuncias-routing.module';
-import { DenunciasComponent } from './denuncias.component';
-import {ReactiveFormsModule} from '@angular/forms';
+import { LeyesRoutingModule } from './leyes-routing.module';
+import { LeyesComponent } from './leyes.component';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {UsuariosModule} from '../../usuarios/usuarios/usuarios.module';
 
+
 @NgModule({
-  declarations: [DenunciasComponent],
+  declarations: [LeyesComponent],
   imports: [
     CommonModule,
-    DenunciasRoutingModule,
-    ReactiveFormsModule,
+    LeyesRoutingModule,
     MatPaginatorModule,
     UsuariosModule
   ]
 })
-export class DenunciasModule { }
+export class LeyesModule { }

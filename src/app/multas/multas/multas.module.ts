@@ -4,6 +4,10 @@ import { CommonModule } from '@angular/common';
 import { MultasRoutingModule } from './multas-routing.module';
 import { MultasComponent } from './multas.component';
 import {ReactiveFormsModule} from '@angular/forms';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {UsuariosModule} from '../../usuarios/usuarios/usuarios.module';
+
+
 
 
 @NgModule({
@@ -11,7 +15,9 @@ import {ReactiveFormsModule} from '@angular/forms';
   imports: [
     CommonModule,
     MultasRoutingModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatPaginatorModule,
+    UsuariosModule,
   ]
 })
 export class MultasModule { }

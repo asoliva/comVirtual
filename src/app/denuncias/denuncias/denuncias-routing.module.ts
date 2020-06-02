@@ -1,12 +1,14 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import {DenunciasComponent} from './denuncias.component';
+import {AuthGuardGuard} from '../../services/auth/guards/auth-guard.guard';
 
 
 const routes: Routes = [
   {
     path: 'denuncias',
-    component: DenunciasComponent
+    component: DenunciasComponent,
+    canActivate: [AuthGuardGuard]
   }
 ];
 
